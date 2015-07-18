@@ -1,5 +1,3 @@
-#added to source
-
 require 'selenium-webdriver'
 require 'test/unit'
 include Test::Unit::Assertions
@@ -9,8 +7,8 @@ startTime = Time.now
 # Use this to run against the headless unit redirected on port 4444
 @driver = Selenium::WebDriver.for(
 	:remote, 
-	#:url => 'http://localhost:4444/wd/hub'
-	:url => 'http://52.27.243.242:4444/wd/hub'
+	:url => 'http://localhost:4444/wd/hub'
+	#:url => 'http://52.27.243.242:4444/wd/hub'
 	)
 
 # Use this to run locally against Firefox
