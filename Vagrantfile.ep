@@ -1,6 +1,7 @@
 # encoding: utf-8
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+# added to source
 
 Vagrant.configure("2") do |config|
   config.vm.box = "precise64"

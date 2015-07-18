@@ -1,3 +1,4 @@
+# added to source
 #!/bin/sh
 set -e
 
