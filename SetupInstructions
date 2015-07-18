@@ -1,0 +1,54 @@
+
+Reference URLS
+- http://www.chrisle.me/2013/08/running-headless-selenium-with-chrome/
+- http://dawogfather.github.io/vagrant-aws-selenium/
+- http://cloud-images.ubuntu.com/locator/ec2/
+
+Download and Install
+- VirtualBox
+- Vagrant
+- ruby
+
+Get Template files
+- TestProject.zip
+
+#####
+Ruby and ruby gems install missing
+#####
+
+AT COMMAND LINE
+
+Install vagrant precise64 bit box 
+- 'vagrant box add precise64 http://files.vagrantup.com/precise64.box'
+
+Install vagrant aws provider plugin
+- 'vagrant plugin install vagrant-aws'
+
+Create project directory
+- 'mkdir MyProject'
+
+Change to project directory
+- 'cd MyProject'
+
+Copy project files in and unzip them
+- 'cp <path to file>/TestProject.zip .'
+- 'unzip TestProject.zip'
+
+Create necessary files from templates
+
+- 'cp TestProject/* .'
+
+Edit files IF NEEDED to customize
+- Vagrantfile
+- setup.sh
+
+On command line, in project directory run 
+- 'vagrant up' #local instance
+- 'vagrant up --provider=aws' #aws instance
+- ‘VAGRANT_LOG=info vagrant up --provider=aws' #with logging.
+
+Check if system is running
+- http://localhost:4444/wd/hub/static/resource/hub.html
+
+Run basic selenium test with ruby
+- ruby SimpleSelenium.rb
