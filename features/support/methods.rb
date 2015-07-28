@@ -27,7 +27,12 @@ def loadMainPage()
   endTime = Time.now
   loadTime = (endTime - startTime)
 
-  #reportPageInfo('Main Page')
+  caller = 'MainPage'
+  if loadTime < @maxPageLoad
+    logPassFail(caller, true)
+  else
+    logPassFail(caller, false)
+  end
 
   return(loadTime)
 end
@@ -39,6 +44,13 @@ def loadSignInPage()
 
   endTime = Time.now
   loadTime = (endTime - startTime)
+
+  caller = 'SignInPage'
+  if loadTime < @maxPageLoad
+    logPassFail(caller, true)
+  else
+    logPassFail(caller, false)
+  end
 
   return(loadTime)
 end
@@ -61,10 +73,17 @@ def signInOut ()
   #signout
   @driver.find_element(:id, "ctl00_MasterHeader_ctl00_uchead_SH_MasterPageHeaderSubmenu_ucWelcome_SignOut1").click
 
+  caller = 'SignIn'
+  if loadTime < @maxPageLoad
+    logPassFail(caller, true)
+  else
+    logPassFail(caller, false)
+  end
+
   return(loadTime)
 end
 
-def searchTime(searchstring)
+def doSearch(searchstring)
   search = @driver.find_element(:id, "ctl00_MasterHeader_ctl00_uchead_GlobalSearchUC_TxtSearchKeyword")
 
   search.send_keys(searchstring)
@@ -73,19 +92,57 @@ def searchTime(searchstring)
   search.send_key :return
 
   endTime = Time.now
-  searchTime = (endTime - startTime)
+  loadTime = (endTime - startTime)
 
   @searchCount = @driver.find_element(:css => "[data-model='product']").find_element(:class,"count").find_element(:class,"count-value").text
 
-  return(searchTime)
+  caller = 'Search'
+  if loadTime < @maxPageLoad
+    logPassFail(caller, true)
+  else
+    logPassFail(caller, false)
+  end
+
+  return(loadTime)
 end
 
 def logResults (mainPage, signInPage, signIn, totalSignIn, searchTime, searchCount)
 
-  resultTime = Time.now.strftime("%Y-%m-%d %H:%M:%S")
   fileName = "results/" + @resultsFile
   myFile = File.open(fileName, "a")
-  myFile.puts resultTime.to_s + ',' + mainPage.to_s + ',' + signInPage.to_s + ',' + signIn.to_s + ',' + totalSignIn.to_s + ',' + searchTime.to_s + ',' + searchCount.to_s
+  myFile.puts @resultTime.to_s + ',' + mainPage.to_s + ',' + signInPage.to_s + ',' + signIn.to_s + ',' + totalSignIn.to_s + ',' + searchTime.to_s + ',' + searchCount.to_s
   myFile.close
+
+  logPassFailResults()
+
+end
+
+def logPassFail (caller, pf)
+
+  if pf == false
+    @pfAll = false
+  end
+
+  case caller
+    when 'MainPage'
+      @pfMainPage = pf
+    when 'SignInPage'
+      @pfSignInPage = pf
+    when 'SignIn'
+      @pfSignIn = pf
+    when 'TotalSignIn'
+      @pfTotalSignIn = pf
+    when 'Search'
+      @pfSearch = pf
+    else
+      puts 'who called you?'
+  end
+end
+
+def logPassFailResults ()
+
+  fileName = "results/" + @pfFile
+  myFile = File.open(fileName, "w")
+  myFile.puts @resultTime.to_s + ',' + @pfAll.to_s + ',' + @pfMainPage.to_s + ',' + @pfSignInPage.to_s + ',' + @pfSignIn.to_s + ',' + @pfTotalSignIn.to_s + ',' + @pfSearch.to_s
 
 end

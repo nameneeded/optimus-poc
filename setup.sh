@@ -19,8 +19,20 @@ else
   # Update app-get
   apt-get update
 
-  # Install Java, Chrome, Xvfb, and unzip
-  apt-get -y install openjdk-7-jre google-chrome-stable xvfb unzip firefox
+  # Install Java, Chrome, Xvfb, unzip, firefox, ruby-dev
+  apt-get -y install openjdk-7-jre google-chrome-stable xvfb unzip firefox ruby-dev zlib1g-dev
+
+  # Install Ruby gems
+  gem install selenium-webdriver
+  gem install cucumber
+  gem install rspec
+  gem install rubyXL
+
+  # Set the timezone to America/Vancouver
+  timedatectl set-timezone America/Vancouver
+
+  # Set the datetime to be accurate
+  ntpdate pool.ntp.org
 
   # Get chromedriver, selenium-server and phantomjs
   # Unzip them and move them to /usr/local/bin
@@ -49,16 +61,26 @@ fi
 
 echo "Run as root ..."
 
+# Add the cronjob to crontab - change this to use Ubuntu user?
+#echo "Adding cronjob"
+#crontab /vagrant/cronjob
+
+# Export Display
 echo "export display ..."
 export DISPLAY=:10
+
+# Change to /vagrant and run local commands
 cd /vagrant
 
+# Start Xvfb
 echo "Starting Xvfb ..."
 Xvfb :10 -screen 0 1366x768x24 -ac &
 
+# Start Chrome
 echo "Starting Google Chrome ..."
 google-chrome --remote-debugging-port=9222 &
 
+# Start Selenium
 echo "Starting Selenium ..."
 cd /usr/local/bin
 nohup java -jar ./selenium-server-standalone-2.46.0.jar &

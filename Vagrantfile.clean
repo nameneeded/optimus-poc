@@ -3,8 +3,8 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.box_url = "https://vagrantcloud.com/ubuntu/boxes/trusty64"
   config.ssh.forward_agent = true
 
   config.vm.provider "virtualbox" do |v|
@@ -14,20 +14,20 @@ Vagrant.configure("2") do |config|
   config.vm.provider :aws do |aws, override|
 
     override.vm.box = "dummy"               # overrides virtuabox config to use empty box as will load ami below...
-    override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+    override.vm.box_url = "https://raw.githubusercontent.com/mitchellh/vagrant-aws/master/dummy.box"
     
     # FREE
-    aws.access_key_id = 'enteryouraccesskeyhere'      # 
-    aws.secret_access_key = 'enteryoursecretaccesskeyhere'  # 
-    aws.keypair_name = 'enteryourkeypairnamehere'       # 
+    aws.access_key_id = 'KEYHERE'      # 
+    aws.secret_access_key = 'KEYHERE'  # 
+    aws.keypair_name = 'VALUE'       # 
     aws.security_groups = ["default"]
     override.ssh.username = 'ubuntu'
-    override.ssh.private_key_path = 'whereisyourpemfileandwhatisitcalled'
+    override.ssh.private_key_path = 'KEYFILE'
            
     # Shared Information
     aws.region = "us-west-2"
-    aws.instance_type = "t2.micro"
-    aws.ami = 'ami-13b0b123'        # ubuntu 12.04 HVM:ebs amd64
+#    aws.instance_type = "t2.micro"
+    aws.ami = 'ami-2bbeb21b'        # ubuntu/trusty 14.04 HVM:ebs amd64
     
     aws.tags = {
       'Owner' => 'QA',

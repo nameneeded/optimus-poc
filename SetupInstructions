@@ -20,8 +20,8 @@ Ruby and ruby gems install missing
 
 AT COMMAND LINE
 
-Install vagrant precise64 bit box 
-- 'vagrant box add precise64 http://files.vagrantup.com/precise64.box'
+Install vagrant trusty64 bit box 
+- 'vagrant box add ubuntu/trusty64 https://vagrantcloud.com/ubuntu/boxes/trusty64'
 
 Install vagrant aws provider plugin
 - 'vagrant plugin install vagrant-aws'
@@ -41,7 +41,7 @@ Create necessary files from templates
 - 'cp TestProject/* .'
 
 Edit files IF NEEDED to customize
-- Vagrantfile
+- first rename Vagrantfile.clean to Vagrantfile
 - setup.sh
 
 On command line, in project directory run 
@@ -49,8 +49,52 @@ On command line, in project directory run
 - 'vagrant up --provider=aws' #aws instance
 - ‘VAGRANT_LOG=info vagrant up --provider=aws' #with logging.
 
-Check if system is running
-- http://localhost:4444/wd/hub/static/resource/hub.html
+Check if system is running:
+- ‘http://localhost:4444/wd/hub/static/resource/hub.html
+
+
+If you are running remote in AWS you may need to get the IP of the machine:
+- ‘vagrant ssh’
+- ‘curl http://169.254.169.254/latest/meta-data/public-ipv4'
+
+To run the basic selenium test from within the vagrant box
+- ‘vagrant ssh’
+- ‘sudo apt-get install ruby-dev’
+- ‘sudo gem install selenium-webdriver’
+
+To run the site monitor test on the vagrant box
+- ‘vagrant ssh’
+- ‘sudo apt-get install zlib1g-dev’
+- ‘sudo gem install cucumber’
+- ‘sudo gem install rspec’
+- ‘sudo gem install rubyXL’
+
+To set up the cron job to run every 5 minutes
+- ‘crontab -e’ #I like option 3 personally for VI basic
+- */5 * * * * bash -lc '/vagrant/eComSiteMon.sh'
+
+To have this happen automatically
+- ‘vagrant ssh’
+- ‘cd /vagrant/‘
+- ‘crontab cronjob’
 
 Run basic selenium test with ruby
 - ruby SimpleSelenium.rb
+
+##### ##### ##### ##### #####
+# Teardown
+
+In order to remove the vagrant correctly use:
+- ‘vagrant global-status’
+
+This returns something like: 
+id       name    provider   state   directory                               
+----------------------------------------------------------------------------
+472d1dd  default aws        running /<path>/MyProject   
+45df323  default aws        running /<path>/TestProject 
+
+To destroy the MyProject example above, get the ID for the image you want to remove then
+- ‘vagrant destroy 472d1dd’
+
+To remove the vagrant box image used
+- ‘vagrant box remove ubuntu/trusty64’
